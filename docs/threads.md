@@ -1,29 +1,9 @@
+﻿@'
 # Virtual Thread Migration and Pinning Hunt
 
 ## Baseline
 
-The application was teste# Virtual Thread Migration and Pinning Hunt
-
-## Baseline
-
 The application was tested using the main read endpoint with 200 concurrent
-virtual users for 60 seconds.
-
-### Baseline Results
-
-- **Iterations:** 102,923
-- **Throughput:** 1,718.886 req/s
-- **Average latency:** 115.5 ms
-- **p95 latency:** 169.49 msGet-ChildItem src/main/java/org -Recurse -File | Select-Object FullName
-- **p99 latency:** 236.12 ms
-- **Failed requests:** 0.00%
-
-## Virtual Thread Migration
-
-Virtual threads were enabled with:
-
-```properties
-spring.threads.virtual.enabled=trued using the main read endpoint with 200 concurrent
 virtual users for 60 seconds.
 
 ### Baseline Results
@@ -41,6 +21,3 @@ Virtual threads were enabled with:
 
 ```properties
 spring.threads.virtual.enabled=true
-## Rollback
-
-If the virtual-thread migration causes unexpected production behavior, revert this pull request and restart the application. The previous Spring Boot executor configuration and request-path lookup initialization will then be restored.
