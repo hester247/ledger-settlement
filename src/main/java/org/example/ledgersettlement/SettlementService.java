@@ -1,4 +1,4 @@
-package org.example.ledgersettlement;
+﻿package org.example.ledgersettlement;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -13,27 +13,31 @@ import java.util.Map;
 public class SettlementService {
 
     private final PaymentRepository paymentRepository;
-    private final Map<String, String> lookupTable;
 
     @Value("${ledger.fee-rate}")
     private double feeRate;
 
-    public SettlementService(PaymentRepository paymentRepository) {
-        this.paymentRepository = paymentRepository;
-        this.lookupTable = loadTable();
+    private static class LookupTable {
+        static final Map<String, String> TABLE = loadTable();
+
+        private static Map<String, String> loadTable() {
+            synchronized (LookupTable.class) {
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    throw new IllegalStateException(e);
+                }
+
+                Map<String, String> table = new HashMap<>();
+                table.put("MR-4471", "GBP");
+                return table;
+            }
+        }
     }
 
-    private Map<String, String> loadTable() {
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            throw new IllegalStateException(e);
-        }
-
-        Map<String, String> table = new HashMap<>();
-        table.put("MR-4471", "GBP");
-        return table;
+    public SettlementService(PaymentRepository paymentRepository) {
+        this.paymentRepository = paymentRepository;
     }
 
     @Transactional
@@ -43,7 +47,7 @@ public class SettlementService {
 
     public long calculateSettlement(String merchantId) {
 
-        lookupTable.get(merchantId);
+        LookupTable.TABLE.get(merchantId);
 
         List<PaymentEntity> payments =
                 paymentRepository.findByMerchantId(merchantId);
@@ -54,7 +58,6 @@ public class SettlementService {
             );
         }
 
-        // Convert the configured fee rate to an integer rate.
         long feeRateInteger =
                 BigDecimal.valueOf(feeRate)
                         .multiply(BigDecimal.valueOf(10000))
@@ -63,7 +66,6 @@ public class SettlementService {
         long totalOwed = 0;
 
         for (PaymentEntity payment : payments) {
-
             long fee =
                     payment.getAmountMinor() * feeRateInteger / 10000;
 

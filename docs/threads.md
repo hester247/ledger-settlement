@@ -34,7 +34,7 @@ virtual users for 60 seconds.
 - **p95 latency:** 169.49 ms
 - **p99 latency:** 236.12 ms
 - **Failed requests:** 0.00%
-
+git diff --cached --checkgit log --oneline --all --decorate -15git switch -c spring-app-baseline backup-before-pr-fix
 ## Virtual Thread Migration
 
 Virtual threads were enabled with:
