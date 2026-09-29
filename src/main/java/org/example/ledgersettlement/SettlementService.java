@@ -1,5 +1,6 @@
-package org.example.ledgersettlement;
+﻿package org.example.ledgersettlement;
 
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,9 +19,18 @@ public class SettlementService {
     @Value("${ledger.fee-rate}")
     private double feeRate;
 
+    private long feeRateInteger;
+
     public SettlementService(PaymentRepository paymentRepository) {
         this.paymentRepository = paymentRepository;
         this.lookupTable = loadTable();
+    }
+
+    @PostConstruct
+    private void initializeFeeRate() {
+        feeRateInteger = BigDecimal.valueOf(feeRate)
+                .multiply(BigDecimal.valueOf(10000))
+                .longValue();
     }
 
     private Map<String, String> loadTable() {
@@ -53,12 +63,6 @@ public class SettlementService {
                     "Unknown merchant: " + merchantId
             );
         }
-
-        // Convert the configured fee rate to an integer rate.
-        long feeRateInteger =
-                BigDecimal.valueOf(feeRate)
-                        .multiply(BigDecimal.valueOf(10000))
-                        .longValue();
 
         long totalOwed = 0;
 
