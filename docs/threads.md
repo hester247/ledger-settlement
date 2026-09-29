@@ -34,10 +34,13 @@ virtual users for 60 seconds.
 - **p95 latency:** 169.49 ms
 - **p99 latency:** 236.12 ms
 - **Failed requests:** 0.00%
-git diff --cached --checkgit log --oneline --all --decorate -15git switch -c spring-app-baseline backup-before-pr-fix
+
 ## Virtual Thread Migration
 
 Virtual threads were enabled with:
 
 ```properties
 spring.threads.virtual.enabled=true
+## Rollback
+
+If the virtual-thread migration causes unexpected production behavior, revert this pull request and restart the application. The previous Spring Boot executor configuration and request-path lookup initialization will then be restored.
