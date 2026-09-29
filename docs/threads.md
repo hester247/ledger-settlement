@@ -20,4 +20,4 @@ virtual users for 60 seconds.
 Virtual threads were enabled with:
 
 ```properties
-spring.threads.virtual.enabled=true
+spring.threads.virtual.enabled=truethreads.virtual.enabled=true
