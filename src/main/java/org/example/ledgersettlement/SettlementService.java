@@ -1,4 +1,4 @@
-﻿package org.example.ledgersettlement;
+package org.example.ledgersettlement;
 
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
