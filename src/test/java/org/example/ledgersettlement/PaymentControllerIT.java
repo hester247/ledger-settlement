@@ -24,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
 @AutoConfigureTestRestTemplate
-@Testcontainers
+@Testcontainers(disabledWithoutDocker = true)
 class PaymentControllerIT {
 
     @Container

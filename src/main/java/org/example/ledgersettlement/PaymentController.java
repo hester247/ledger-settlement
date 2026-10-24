@@ -40,6 +40,16 @@ public class PaymentController {
     public record SettlementResponse(long amountOwed) {
     }
 
+    public static PaymentResponse toPaymentResponse(PaymentEntity savedPayment) {
+        return new PaymentResponse(
+                savedPayment.getId(),
+                savedPayment.getMerchantId(),
+                savedPayment.getAmountMinor(),
+                savedPayment.getCurrency(),
+                savedPayment.getRecordedAt()
+        );
+    }
+
     @PostMapping
     public ResponseEntity<PaymentResponse> recordPayment(
             @Valid @RequestBody RecordPaymentRequest request) {
@@ -55,13 +65,7 @@ public class PaymentController {
         PaymentEntity savedPayment =
                 settlementService.recordPayment(payment);
 
-        PaymentResponse response = new PaymentResponse(
-                savedPayment.getId(),
-                savedPayment.getMerchantId(),
-                savedPayment.getAmountMinor(),
-                savedPayment.getCurrency(),
-                savedPayment.getRecordedAt()
-        );
+        PaymentResponse response = toPaymentResponse(savedPayment);
 
         URI location = URI.create("/payments/" + savedPayment.getId());
 
@@ -79,6 +83,4 @@ public class PaymentController {
                 new SettlementResponse(amountOwed)
         );
     }
-
-
 }
